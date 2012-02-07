@@ -14,16 +14,9 @@ let s:detectLang = {
  \ }
 
 function! CodePadRun(line1, line2)
-  let content = join(getline(a:line1, a:line2), "\n")
-  if has_key(s:detectLang, &ft)
-    let type = s:detectLang[&ft]
-  else
-    let type = ""
-  endif
-  let type = len(type) ? type : 'Plain Text'
   let res = http#post('http://codepad.org/', {
-  \ 'lang'  : type,
-  \ 'code'   : content,
+  \ 'lang'  : get(s:detectLang, &ft, 'Plain Text'),
+  \ 'code'   : join(getline(a:line1, a:line2), "\n"),
   \ 'run'    : 'True',
   \ 'submit' : 'Submit',
   \})
