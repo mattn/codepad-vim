@@ -14,7 +14,7 @@ let s:detectLang = {
  \ }
 
 function! CodePadRun(line1, line2)
-  let res = http#post('http://codepad.org/', {
+  let res = webapi#http#post('http://codepad.org/', {
   \ 'lang'  : get(s:detectLang, &ft, 'Plain Text'),
   \ 'code'   : join(getline(a:line1, a:line2), "\n"),
   \ 'run'    : 'True',
@@ -22,7 +22,7 @@ function! CodePadRun(line1, line2)
   \})
   let mx = "^.*<a name=\"output\">.*<pre>\\s*\<NL>\\zs.*\\ze</pre>\\=.*$"
   let content = substitute(matchstr(res.content, mx), '<[^>]+', '', 'g')
-  let content = html#decodeEntityReference(content)
+  let content = webapi#html#decodeEntityReference(content)
   echo content
 endfunction
 
